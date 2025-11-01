@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+import { NewPaymentAdapter, PaymentService } from "./adapter";
 import factoryController from "./factory/controller";
 import { StockMarket } from "./observer";
 import { getLog } from "./singleton";
@@ -50,6 +51,16 @@ app.get("/strategy", (c) => {
 	discount.applyDiscount(30);
 
 	return c.json({ recentLogs: discount.toString() });
+});
+
+app.get("/adapter", (c) => {
+	const adapter = new NewPaymentAdapter();
+	const paymentService = new PaymentService(adapter);
+
+	paymentService.process("ORDER-123", 250.75);
+	paymentService.process("ORDER-456", 99.9);
+
+	return c.json({});
 });
 
 export default app;
