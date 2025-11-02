@@ -16,6 +16,7 @@ import {
 	PercentDiscount,
 	TakeTwoPayOneDiscount,
 } from "./strategy";
+import { PaymentApi } from "./template";
 
 const app = new Hono();
 
@@ -104,6 +105,18 @@ app.get("/chain-of-responsability", (c) => {
 	};
 
 	new OrderApi().submitOrder(order);
+	return c.json({});
+});
+
+app.get("/template", (c) => {
+	const api = new PaymentApi();
+
+	api.process({
+		id: "P1",
+		amount: 1200,
+		method: "CREDIT_CARD",
+		details: { cardNumber: "4111111111111111" },
+	});
 	return c.json({});
 });
 
