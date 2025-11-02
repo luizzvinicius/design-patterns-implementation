@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import { NewPaymentAdapter, PaymentService } from "./adapter";
+import { OrderApi } from "./chain-of-responsability";
 import {
 	CsvDataExporter,
 	JsonDataExporter,
@@ -89,6 +90,20 @@ app.get("/facade", (c) => {
 	ecommerce.listProducts();
 
 	ecommerce.placeOrder(1, [1, 3]);
+	return c.json({});
+});
+
+app.get("/chain-of-responsability", (c) => {
+	const order = {
+		id: 1,
+		customerId: 100,
+		items: [
+			{ productId: 1, quantity: 2, price: 1500 },
+			{ productId: 2, quantity: 1, price: 500 },
+		],
+	};
+
+	new OrderApi().submitOrder(order);
 	return c.json({});
 });
 
