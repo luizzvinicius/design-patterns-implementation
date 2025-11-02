@@ -1,5 +1,10 @@
 import { Hono } from "hono";
 import { NewPaymentAdapter, PaymentService } from "./adapter";
+import {
+	CsvDataExporter,
+	JsonDataExporter,
+	XmlDataExporter,
+} from "./decorator";
 import factoryController from "./factory/controller";
 import { StockMarket } from "./observer";
 import { getLog } from "./singleton";
@@ -59,6 +64,20 @@ app.get("/adapter", (c) => {
 
 	paymentService.process("ORDER-123", 250.75);
 	paymentService.process("ORDER-456", 99.9);
+
+	return c.json({});
+});
+
+app.get("/decorator", (c) => {
+	const data = {
+		id: 1,
+		name: "Planilha básica",
+		extension: "csv",
+	};
+
+	new JsonDataExporter().export(data);
+	new XmlDataExporter().export(data);
+	new CsvDataExporter().export(data);
 
 	return c.json({});
 });
