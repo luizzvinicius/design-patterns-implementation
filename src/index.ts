@@ -5,6 +5,7 @@ import {
 	JsonDataExporter,
 	XmlDataExporter,
 } from "./decorator";
+import { ECommerceFacade } from "./facade";
 import factoryController from "./factory/controller";
 import { StockMarket } from "./observer";
 import { getLog } from "./singleton";
@@ -79,6 +80,15 @@ app.get("/decorator", (c) => {
 	new XmlDataExporter().export(data);
 	new CsvDataExporter().export(data);
 
+	return c.json({});
+});
+
+app.get("/facade", (c) => {
+	const ecommerce = new ECommerceFacade();
+
+	ecommerce.listProducts();
+
+	ecommerce.placeOrder(1, [1, 3]);
 	return c.json({});
 });
 
