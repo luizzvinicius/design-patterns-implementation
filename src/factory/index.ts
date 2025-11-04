@@ -11,6 +11,14 @@ export interface NotificationService {
 	): Promise<NotificationResult>;
 }
 
+export const NOTIFICATION_TYPES = {
+	EMAIL: "email",
+	SMS: "sms",
+	PUSH: "push",
+} as const;
+
+export type NotificationType = typeof NOTIFICATION_TYPES[keyof typeof NOTIFICATION_TYPES];
+
 export class EmailNotificationService implements NotificationService {
 	async sendNotification(
 		destination: string,
@@ -49,7 +57,6 @@ export class PushNotificationService implements NotificationService {
 	}
 }
 
-export type NotificationType = "email" | "sms" | "push";
 
 export class NotificationFactory {
 	static createNotificationService(
@@ -57,13 +64,13 @@ export class NotificationFactory {
 	): NotificationService {
 		let notificationService: NotificationService;
 		switch (type) {
-			case "email":
+			case NOTIFICATION_TYPES.EMAIL:
 				notificationService = new EmailNotificationService();
 				break;
-			case "sms":
+			case NOTIFICATION_TYPES.SMS:
 				notificationService = new SmsNotificationService();
 				break;
-			case "push":
+			case NOTIFICATION_TYPES.PUSH:
 				notificationService = new PushNotificationService();
 				break;
 			default:
