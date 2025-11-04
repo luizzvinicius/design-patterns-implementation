@@ -82,6 +82,8 @@ export class ECommerceFacade {
 	listProducts(): void {
 		const products = this.productService.getAvailableProducts();
 		console.log("Produtos disponíveis:");
-		products.forEach((p) => console.log(`- ${p.name} (R$${p.price})`));
+		products.forEach((p) => {
+			console.log(`- ${p.name} (R$${p.price})`);
+		});
 	}
 }

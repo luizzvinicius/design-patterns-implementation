@@ -29,3 +29,7 @@ export function getLog() {
 	log = new Log([]);
 	return log;
 }
+
+export function resetLog() {
+	log = null;
+}

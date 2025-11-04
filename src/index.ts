@@ -13,8 +13,8 @@ import { getLog } from "./singleton";
 import {
 	Discount,
 	type DiscountStrategy,
-	PercentDiscount,
-	TakeTwoPayOneDiscount,
+	FixedAmountDiscount,
+	PercentageDiscount,
 } from "./strategy";
 import { PaymentApi } from "./template";
 
@@ -46,19 +46,19 @@ app.get("/observer", (c) => {
 
 app.get("/strategy", (c) => {
 	const amount = Math.round(Math.random() * 100);
-	const percent = new PercentDiscount();
-	const twpo = new TakeTwoPayOneDiscount();
+	const percent = new PercentageDiscount(20);
+	const fixed = new FixedAmountDiscount(50);
 	let discountStrategy: DiscountStrategy | null;
 
 	discountStrategy = percent;
 	if (amount % 2 === 0) {
-		discountStrategy = twpo;
+		discountStrategy = fixed;
 	}
 
 	const discount = new Discount(discountStrategy);
 	discount.applyDiscount(30);
 
-	return c.json({ recentLogs: discount.toString() });
+	return c.json({ recentLogs: discount.getDescription() });
 });
 
 app.get("/adapter", (c) => {
